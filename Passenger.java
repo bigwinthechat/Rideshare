@@ -14,6 +14,22 @@ public class Passenger {
         start = myStart;
         destination = myDestination;
         ID = globalID++;
-        
     }
-}
+    
+    
+    public int getStart(){
+            return start;
+        }
+    
+    public int getDestination(){
+            return destination;
+        }
+    
+    public int getID(){
+            return ID;
+        }
+    
+    public boolean getDirection(){
+            return direction;
+        }
+    }
