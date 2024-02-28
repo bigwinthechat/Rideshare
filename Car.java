@@ -31,16 +31,13 @@ public class Car {
     }
 
     //getters
-    public ArrayList<Passenger> getPeople()
-    {
+    public ArrayList<Passenger> getPeople(){
         return people;
     }
-    public int getStationNumber()
-    {
+    public int getStationNumber(){
         return currentStation;
     }
-    public int getDestination()
-    {
+    public int getDestination(){
         return destination;
     }
 
