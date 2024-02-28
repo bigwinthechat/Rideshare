@@ -24,102 +24,80 @@ public class Station{
     public void boardTrain(){
         for (int n =people.size() - 1; n >= 0; n--){
             Passenger person = people.get(n);
-            if (person.getDestination() > stationNumber)
-            {
+            if (person.getDestination() > stationNumber){
                 int carIndex = -1;
-                for (int i = 0; i < cars.size(); i++)
-                {
+                for (int i = 0; i < cars.size(); i++){
                     Car car = cars.get(i);
                     if (car.getDestination() > stationNumber)
                     {
                         carIndex = i;
                     }
                 }
-        if (carIndex != -1 && cars.get(carIndex).getPeople().size() != 3)
-                {
+        if (carIndex != -1 && cars.get(carIndex).getPeople().size() != 3){
                     cars.get(carIndex).addPerson(person);
                     people.remove(n);
                 }
             }
-            else if (person.getDestination() < stationNumber)
-            {
+            else if (person.getDestination() < stationNumber){
                 int carIndex = -1;
-                for (int i = 0; i < cars.size(); i++)
-                {
+                for (int i = 0; i < cars.size(); i++){
                     Car car = cars.get(i);
-                    if (car.getDestination() < stationNumber)
-                    {
+                    if (car.getDestination() < stationNumber){
                         carIndex = i;
                     }
                 }
-                if (carIndex != -1 && cars.get(carIndex).getPeople().size() != 3)
-                {
+                if (carIndex != -1 && cars.get(carIndex).getPeople().size() != 3){
                     cars.get(carIndex).addPerson(person);
                     people.remove(n);
                 }
             }
         }
     }
-    public void unloadPassengers()
-    {
-        for (int i = 0; i < cars.size(); i++)
-        {
+
+    public void unloadPassengers(){
+        for (int i = 0; i < cars.size(); i++){
             Car car = cars.get(i);
-            for (int n = car.getPeople().size() - 1; n > -1; n--)
-            {
-                if (car.getPeople().get(n).getDestination() == getStationNumber())
-                {
+            for (int n = car.getPeople().size() - 1; n > -1; n--){
+                if (car.getPeople().get(n).getDestination() == getStationNumber()){
                     car.removePerson(n);
                 }
             }
         }
     }
-    public void checkCars()
-    {
-        for (int i = cars.size() - 1; i > -1; i--)
-        {
-            if (cars.get(i).getDestination() == getStationNumber())
-            {
+    public void checkCars(){
+        for (int i = cars.size() - 1; i > -1; i--){
+            if (cars.get(i).getDestination() == getStationNumber()){
                 despawnCar(i);
             }
         }
     }
-    public void spawnPerson(int destination)
-    {
+    public void spawnPerson(int destination){
         people.add(new Passenger(destination));
     }
-    public void addPerson(Passenger person)
-    {
+    public void addPerson(Passenger person){
         people.add(person);
     }
-    public void removePerson(int index)
-    {
+    public void removePerson(int index){
         people.remove(index);
     }
-    public ArrayList<Passenger> getPeople()
-    {
+    public ArrayList<Passenger> getPeople(){
         return people;
     }
-    public void spawnCar(int destination)
-    {
+    public void spawnCar(int destination){
         cars.add(new Car(stationNumber, destination));
     }
-    public void addCar(Car car)
-    {
+    public void addCar(Car car){
         cars.add(car);
     }    
-    public void despawnCar(int index)
-    {
+    public void despawnCar(int index){
         Car car = cars.get(index);
-        for (int i = car.getPeople().size() - 1; i > -1; i--)
-        {
+        for (int i = car.getPeople().size() - 1; i > -1; i--){
             addPerson(car.getPeople().get(i));
             car.removePerson(i);
         }
         cars.remove(index);
     }
-    public void removeCar(int index)
-    {
+    public void removeCar(int index){
         cars.remove(index);
     }
 }
