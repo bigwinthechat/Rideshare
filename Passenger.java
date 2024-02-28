@@ -1,4 +1,5 @@
 public class Passenger {
+    //fields
     private int start;
     private int destination;
     private boolean direction;
