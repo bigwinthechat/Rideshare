@@ -14,5 +14,6 @@ public class Passenger {
         start = myStart;
         destination = myDestination;
         ID = globalID++;
+        
     }
 }
