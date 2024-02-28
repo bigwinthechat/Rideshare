@@ -30,4 +30,18 @@ public class Car {
         currentStation++;
     }
 
+    //getters
+    public ArrayList<Passenger> getPeople()
+    {
+        return people;
+    }
+    public int getStationNumber()
+    {
+        return currentStation;
+    }
+    public int getDestination()
+    {
+        return destination;
+    }
+
 }
