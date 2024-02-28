@@ -35,10 +35,10 @@ public class Station{
                         carIndex = i;
                     }
                 }
-        if (carIndex != -1 && cars.get(carIndex).getPersons().size() != 3)
+        if (carIndex != -1 && cars.get(carIndex).getPeople().size() != 3)
                 {
                     cars.get(carIndex).addPerson(person);
-                    people.remove(j);
+                    people.remove(n);
                 }
             }
             else if (person.getDestination() < stationNumber)
@@ -52,10 +52,10 @@ public class Station{
                         carIndex = i;
                     }
                 }
-                if (carIndex != -1 && cars.get(carIndex).getPersons().size() != 3)
+                if (carIndex != -1 && cars.get(carIndex).getPeople().size() != 3)
                 {
                     cars.get(carIndex).addPerson(person);
-                    people.remove(j);
+                    people.remove(n);
                 }
             }
         }
@@ -65,9 +65,9 @@ public class Station{
         for (int i = 0; i < cars.size(); i++)
         {
             Car car = cars.get(i);
-            for (int n = car.getPersons().size() - 1; n > -1; n--)
+            for (int n = car.getPeople().size() - 1; n > -1; n--)
             {
-                if (car.getPersons().get(n).getDestination() == getStationNumber())
+                if (car.getPeople().get(n).getDestination() == getStationNumber())
                 {
                     car.removePerson(n);
                 }
@@ -96,7 +96,7 @@ public class Station{
     {
         people.remove(index);
     }
-    public ArrayList<Passenger> getPersons()
+    public ArrayList<Passenger> getPeople()
     {
         return people;
     }
@@ -111,9 +111,9 @@ public class Station{
     public void despawnCar(int index)
     {
         Car car = cars.get(index);
-        for (int i = car.getPersons().size() - 1; i > -1; i--)
+        for (int i = car.getPeople().size() - 1; i > -1; i--)
         {
-            addPerson(car.getPersons().get(i));
+            addPerson(car.getPeople().get(i));
             car.removePerson(i);
         }
         cars.remove(index);
