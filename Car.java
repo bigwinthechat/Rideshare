@@ -12,6 +12,7 @@ public class Car {
     public Car(int myInitialStation, int myDestination){
         destination = myDestination;
         initialStation = myInitialStation;
+        people = new ArrayList<Passenger>();
     }
 
     //mutators
