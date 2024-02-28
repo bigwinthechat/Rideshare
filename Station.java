@@ -9,10 +9,10 @@ public class Station{
     private int stationNumber;
 
     //
-    public Station(int stationNumber)
+    public Station(int myStationNumber)
     {
         people = new ArrayList<Passenger>();
         cars = new ArrayList<Car>();
-        this.stationNumber = stationNumber;
+        stationNumber = myStationNumber;
     }
 }
