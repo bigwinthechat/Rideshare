@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class Station{
-    private ArrayList<Passenger> passengers;
-    private 
+    private ArrayList<Passenger> persons;    
+    private ArrayList<Car> cars;
+    private int stationNumber;
 }
