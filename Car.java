@@ -14,6 +14,7 @@ public class Car {
     public Car(int myInitialStation, int myDestination){
         destination = myDestination;
         initialStation = myInitialStation;
+        ID = globalID++;
         people = new ArrayList<Passenger>();
     }
 
@@ -42,6 +43,9 @@ public class Car {
     }
     public int getDestination(){
         return destination;
+    }
+    public int getID(){
+        return ID;
     }
 
 }
