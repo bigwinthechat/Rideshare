@@ -32,4 +32,7 @@ public class Passenger {
     public boolean getDirection(){
             return direction;
         }
+    public String toString() {
+            return "Destination: " + destination + "Current Position: " + start;
+    }
     }
