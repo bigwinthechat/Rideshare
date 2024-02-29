@@ -33,6 +33,6 @@ public class Passenger {
             return direction;
         }
     public String toString() {
-            return "Destination: " + destination + "Current Position: " + start;
+            return "Dest: " + destination + " Loc: " + start;
     }
     }

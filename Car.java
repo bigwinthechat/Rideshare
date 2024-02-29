@@ -7,6 +7,8 @@ public class Car {
     private int initialStation;
     private int currentStation;
     private boolean moveable;
+    private int ID;
+    private static int globalID = 0;
 
     //constructors
     public Car(int myInitialStation, int myDestination){
