@@ -5,14 +5,22 @@ public class Car {
     private ArrayList<Passenger> people;
     private int destination;
     private int initialStation;
+    private boolean forward;
     private int currentStation;
     private boolean moveable;
+    private int revenue;
 
     //constructors
     public Car(int myInitialStation, int myDestination){
         destination = myDestination;
         initialStation = myInitialStation;
         people = new ArrayList<Passenger>();
+        
+        int Destination = (int) (Math.random()*32);
+        destination = Destination;
+
+        int Start = (int) (Math.random()*32);
+        currentStation = Start;
     }
 
     //mutators
@@ -41,5 +49,19 @@ public class Car {
     public int getDestination(){
         return destination;
     }
+
+	public void move(){
+        if(destination != currentStation){
+            if(forward){
+                currentStation++;
+            } else {
+                currentStation--;
+            }
+        }
+
+        //calculate revenue
+        revenue+=people.size();
+    }
+
 
 }
