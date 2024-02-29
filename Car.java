@@ -7,16 +7,12 @@ public class Car {
     private int initialStation;
     private int currentStation;
     private boolean moveable;
-    private int ID;
-    private boolean directionforward;
-    private static int globalID = 0;
-    private int revenue;
 
     //constructors
-    public Car(){
-        ID = globalID++;
+    public Car(int myInitialStation, int myDestination){
+        destination = myDestination;
+        initialStation = myInitialStation;
         people = new ArrayList<Passenger>();
-        revenue = 0;
     }
 
     //mutators
@@ -30,17 +26,9 @@ public class Car {
     public void removePerson(int index) {
         people.remove(index);
     }
-    
-    //checks direction of car
+
     public void moveStations(){
-        if(destination != currentStation){
-            if(directionforward){
-                currentStation++;
-            } else {
-                currentStation--;
-            }
-        }
-        revenue+=people.size();
+        currentStation++;
     }
 
     //getters
@@ -52,9 +40,6 @@ public class Car {
     }
     public int getDestination(){
         return destination;
-    }
-    public int getID(){
-        return ID;
     }
 
 }
