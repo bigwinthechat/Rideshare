@@ -16,6 +16,7 @@ public class Car {
     public Car(){
         ID = globalID++;
         people = new ArrayList<Passenger>();
+        revenue = 0;
     }
 
     //mutators
@@ -28,11 +29,18 @@ public class Car {
 
     public void removePerson(int index) {
         people.remove(index);
-        revenue+=people.size();
     }
-
+    
+    //checks direction of car
     public void moveStations(){
-        currentStation++;
+        if(destination != currentStation){
+            if(directionforward){
+                currentStation++;
+            } else {
+                currentStation--;
+            }
+        }
+        revenue+=people.size();
     }
 
     //getters
