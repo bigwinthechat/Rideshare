@@ -8,12 +8,12 @@ public class Car {
     private int currentStation;
     private boolean moveable;
     private int ID;
+    private boolean directionforward;
     private static int globalID = 0;
+    private int revenue;
 
     //constructors
-    public Car(int myInitialStation, int myDestination){
-        destination = myDestination;
-        initialStation = myInitialStation;
+    public Car(){
         ID = globalID++;
         people = new ArrayList<Passenger>();
     }
@@ -28,6 +28,7 @@ public class Car {
 
     public void removePerson(int index) {
         people.remove(index);
+        revenue+=people.size();
     }
 
     public void moveStations(){
