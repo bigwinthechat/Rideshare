@@ -67,7 +67,7 @@ public class Station{
     public void checkCars(){
         for (int i = cars.size() - 1; i > -1; i--){
             if (cars.get(i).getDestination() == getStationNumber()){
-                despawnCar(i);
+                removeCar(i);
             }
         }
     }
@@ -89,14 +89,6 @@ public class Station{
     public void addCar(Car car){
         cars.add(car);
     }    
-    public void despawnCar(int index){
-        Car car = cars.get(index);
-        for (int i = car.getPeople().size() - 1; i > -1; i--){
-            addPerson(car.getPeople().get(i));
-            car.removePerson(i);
-        }
-        cars.remove(index);
-    }
     public void removeCar(int index){
         cars.remove(index);
     }
