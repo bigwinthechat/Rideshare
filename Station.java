@@ -9,10 +9,9 @@ public class Station{
     private int stationNumber;
 
     //constructor
-    public Station(int myStationNumber){
+    public Station(){
         people = new ArrayList<Passenger>();
         cars = new ArrayList<Car>();
-        stationNumber = myStationNumber;
     }
     public ArrayList<Car> getCars(){
         return cars;
