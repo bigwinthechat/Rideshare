@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Car {
-    //fields
+    // Fields
     private ArrayList<Passenger> people;
     private int destination;
     private int initialStation;
@@ -10,58 +10,86 @@ public class Car {
     private boolean moveable;
     private int revenue;
 
-    //constructors
-    public Car(int myInitialStation, int myDestination){
+    // Constructor
+    public Car(int myInitialStation, int myDestination) {
         destination = myDestination;
         initialStation = myInitialStation;
         people = new ArrayList<Passenger>();
+        currentStation = myInitialStation;
         
-        int Destination = (int) (Math.random()*32);
-        destination = Destination;
+        // Randomize destination and current station
+        destination = (int) (Math.random() * 32);
+        currentStation = (int) (Math.random() * 32);
 
-        int Start = (int) (Math.random()*32);
-        currentStation = Start;
+        // Set forward direction based on initial and destination stations
+        forward = initialStation < destination;
     }
 
-    //mutators
-    public void addPerson(Passenger human){
-        if(people.size() < 3){
-            people.add(human);
-        }else{
+    // Mutator methods
+    public void changeMoveability(boolean status) {
+        moveable = status;
+    }
+
+    public Passenger dropoff(int pos) {
+        if (pos != -1) {
+            Passenger temp = people.get(pos);
+            people.remove(pos);
+            return temp;
+        }
+        return null;
+    }
+
+    public void remove(int p) {
+        people.remove(p);
+    }
+
+    public void pickup(Passenger p) {
+        if (people.size() <= 3) {
+            people.add(p);
         }
     }
 
-    public void removePerson(int index) {
-        people.remove(index);
+    // Getter methods
+    public int getInitialStation() {
+        return initialStation;
     }
 
-    public void moveStations(){
-        currentStation++;
+    public boolean getMoveable() {
+        return moveable;
     }
 
-    //getters
-    public ArrayList<Passenger> getPeople(){
+    public ArrayList<Passenger> getPeople() {
         return people;
     }
-    public int getStationNumber(){
+
+    public int getStationNumber() {
         return currentStation;
     }
-    public int getDestination(){
+
+    public void setStationNumber(int stationNumber) {
+        currentStation = stationNumber;
+    }
+
+    public int getDestination() {
         return destination;
     }
 
-	public void move(){
-        if(destination != currentStation){
-            if(forward){
+    // Move method
+    public void move() {
+        if (destination != currentStation) {
+            if (forward) {
                 currentStation++;
             } else {
                 currentStation--;
             }
         }
 
-        //calculate revenue
-        revenue+=people.size();
+        // Calculate revenue
+        revenue += people.size();
     }
 
-
+    // Getter for direction
+    public boolean getDirection() {
+        return forward;
+    }
 }
