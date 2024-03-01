@@ -9,11 +9,9 @@ public class Station {
         people = new ArrayList<>();
     }
 
-
     public int getStationNumber() {
         return stationNumber;
     }
-
 
     public void spawnPerson(int destination) {
         people.add(new Passenger(destination));
@@ -23,13 +21,13 @@ public class Station {
         return people;
     }
 
-    public void addPerson(Passenger person)
-    {
+    public void addPerson(Passenger person) {
         people.add(person);
     }
-    public void removePerson(int index)
-    {
+
+    public void removePerson(int index) {
         people.remove(index);
     }
 
+    
 }
