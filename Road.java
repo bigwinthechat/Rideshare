@@ -167,7 +167,7 @@ public class Road{
     public void unloadPassengers(Car car2, Passenger p) {
         for (Car car : cars) {
             for (int n = car.getPeople().size() - 1; n >= 0; n--) {
-                if (car.getPeople().get(n).getDestination() == stationNumber) {
+                if (car.getPeople().get(n).getDestination() == car.getStationNumber()) {
                     car.remove(n);
                 }
             }
@@ -176,7 +176,7 @@ public class Road{
 
     public void checkCars() {
         for (int i = cars.size() - 1; i >= 0; i--) {
-            if (cars.get(i).getDestination() == stationNumber) {
+            if (cars.get(i).getDestination() == cars.get(i).getStationNumber()) {
                 cars.remove(i);
             }
         }
