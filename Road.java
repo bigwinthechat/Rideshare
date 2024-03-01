@@ -122,7 +122,7 @@ public class Road{
     }
     public static void board(){
         for(Station s : stations){
-        s.boardTrain(null);
+        s.boardTrain();
         }
     }
 
@@ -137,6 +137,73 @@ public class Road{
         return null;
     }
 
+    public ArrayList<Car> getCars() {
+        return cars;
+    }
+
+    public Car[] getCompletedCars() {
+        ArrayList<Car> completedCarsList = new ArrayList<>();
+        for (Car car : cars) {
+            if (car.getStationNumber() == car.getDestination()) {
+                completedCarsList.add(car);
+            }
+        }
+        Car[] completedCarsArray = new Car[completedCarsList.size()];
+        return completedCarsList.toArray(completedCarsArray);
+    }
+
+    public void addCar(Car car) {
+        cars.add(car);
+    }
+
+    public void spawnCar(int destination) {
+        cars.add(new Car(stationNumber, destination));
+    }
+
+    public void removeCar(Car car) {
+        cars.remove(car);
+    }
+
+    public void unloadPassengers(Car car2, Passenger p) {
+        for (Car car : cars) {
+            for (int n = car.getPeople().size() - 1; n >= 0; n--) {
+                if (car.getPeople().get(n).getDestination() == stationNumber) {
+                    car.remove(n);
+                }
+            }
+        }
+    }
+
+    public void checkCars() {
+        for (int i = cars.size() - 1; i >= 0; i--) {
+            if (cars.get(i).getDestination() == stationNumber) {
+                cars.remove(i);
+            }
+        }
+    }
+
+    public void boardTrain() {
+        for (int n = people.size() - 1; n >= 0; n--) {
+            Passenger person = people.get(n);
+            if (person.getDestination() > stationNumber) {
+                for (Car car : cars) {
+                    if (car.getDestination() > stationNumber && car.getPeople().size() < 3) {
+                        car.pickup(person);
+                        people.remove(n);
+                        break;
+                    }
+                }
+            } else if (person.getDestination() < stationNumber) {
+                for (Car car : cars) {
+                    if (car.getDestination() < stationNumber && car.getPeople().size() < 3) {
+                        car.pickup(person);
+                        people.remove(n);
+                        break;
+                    }
+                }
+            }
+        }
+    }
     public static void main(String[] args) {
         miles = 0;
         revenue = 0;
