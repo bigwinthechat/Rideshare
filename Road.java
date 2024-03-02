@@ -17,17 +17,25 @@ public class Road {
         cars = new ArrayList<>();
         for (int i = 0; i < num; i++) {
             int startStation = (int) (Math.random() * stations.size());
-            int destinationStation = (int) (Math.random() * stations.size());
+            int destinationStation;
+            do {
+                destinationStation = (int) (Math.random() * 32); // Keep it within the range of 0 to 31
+            } while (destinationStation == startStation || (destinationStation != 0 && destinationStation != 31)); // Ensure destination is different from start and is either 0 or 31
             cars.add(new Car(startStation, destinationStation));
         }
     }
+    
+    
 
     public static void addPassengers(int num) {
         for (int i = 0; i < num; i++) {
-            int s = (int) (Math.random() * 32);
-            stations.get(s).spawnPerson((int) (Math.random() * 32));
+            int startStation = (int) (Math.random() * 32);
+            int destinationStation = (int) (Math.random() * 32);
+            Passenger passenger = new Passenger(startStation, destinationStation);
+            stations.get(startStation).spawnPerson(passenger);
         }
     }
+    
 
     public static Station stationWithID(int ID) {
         for (Station s : stations) {
@@ -43,7 +51,7 @@ public class Road {
             ArrayList<Passenger> passengers = station.getPeople();
             ArrayList<Passenger> passengersUp = new ArrayList<>();
             ArrayList<Passenger> passengersDown = new ArrayList<>();
-
+    
             for (Passenger passenger : passengers) {
                 if (passenger.getDestination() > station.getStationNumber()) {
                     passengersUp.add(passenger);
@@ -51,7 +59,7 @@ public class Road {
                     passengersDown.add(passenger);
                 }
             }
-
+    
             for (Car car : cars) {
                 if ((car.getStationNumber() == station.getStationNumber()) && car.getDirection()) {
                     ArrayList<Passenger> carPassengers = car.getPeople();
@@ -64,6 +72,8 @@ public class Road {
         }
     }
 
+    
+
     private static void pickupPassengers(Car car, ArrayList<Passenger> carPassengers, ArrayList<Passenger> stationPassengers) {
         for (int i = 0; i < stationPassengers.size(); i++) {
             if (carPassengers.size() < 4) {
@@ -74,62 +84,86 @@ public class Road {
         }
     }
 
-    public static void moveAll() {
-        ArrayList<Car> toMoveTrue = new ArrayList<>();
-        ArrayList<Car> toMoveFalse = new ArrayList<>();
+    public boolean carIsAtDestination(Car car) {
+        return car.getStationNumber() == car.getDestination();
+    }
+    
+    public void deleteCar(Car car) {
+        cars.remove(car);
+    }
 
-        for (Station station : stations) {
-            ArrayList<Car> stationCars = new ArrayList<>();
-            for (Car currentCar : cars) {
-                if (currentCar.getStationNumber() == station.getStationNumber() && currentCar.getMoveable()) {
-                    currentCar.move();
-                    currentCar.changeMoveability(false);
-                    if (currentCar.getDirection()) {
-                        toMoveTrue.add(currentCar);
-                    } else {
-                        toMoveFalse.add(currentCar);
-                    }
+    public static boolean anyPassengerInTransit() {
+        for (Car car : cars) {
+            for (Passenger passenger : car.getPeople()) {
+                if (passenger.getDestination() != car.getStationNumber()) {
+                    return true; // At least one passenger is still in transit
                 }
             }
         }
+        return false; // No passengers are in transit
+    }
 
-        for (Car c : toMoveTrue) {
-            int previousStationIndex = c.getStationNumber() - 1;
-            if (previousStationIndex >= 0 && previousStationIndex < stations.size()) {
-                miles++;
-                revenue += c.getPeople().size();
-                c.setStationNumber(previousStationIndex);
+    public void moveAll() {
+        for (int i = 0; i < cars.size(); i++) {
+            Car car = cars.get(i);
+            car.move();
+            
+            // Update total miles traveled
+            miles += car.getDistanceTraveled();
+    
+            if (car.isAtDestination() && car.getPeople().isEmpty()) {
+                cars.remove(i);
+                i--;
             } else {
-                System.out.println("Invalid previous station index");
-                System.out.println(c.getDestination());
+                dropoff(car);
             }
         }
+        putPassengersInCars();
+    }
+    
+    private void removeCar(Car car) {
+        cars.remove(car);
+    }
 
-        for (Car c : toMoveFalse) {
-            int nextStationIndex = c.getStationNumber() + 1;
-            if (nextStationIndex >= 0 && nextStationIndex < stations.size()) {
-                miles++;
-                revenue += c.getPeople().size();
-                c.setStationNumber(nextStationIndex);
-            } else {
-                System.out.println("Invalid next station index");
-                System.out.println(c.getDestination());
+    public ArrayList<Car> getCars() {
+        return cars;
+    }
+
+    public int getMiles() {
+        return miles;
+    }
+
+    public int getRevenue() {
+        return revenue;
+    }
+
+    public ArrayList<Station> getStations() {
+        return stations;
+    }
+
+    public void dropoff(Car car) {
+        Station currentStation = stations.get(car.getStationNumber());
+        ArrayList<Passenger> carPassengers = car.getPeople();
+        ArrayList<Passenger> passengersToRemove = new ArrayList<>();
+    
+        for (Passenger passenger : carPassengers) {
+            if (passenger.getDestination() == car.getStationNumber()) {
+                passengersToRemove.add(passenger);
             }
         }
-
-        for (Station s : stations) {
-            boardTrain();
-        }
-
-        for (Car c : cars) {
-            c.changeMoveability(true);
+    
+        for (Passenger passenger : passengersToRemove) {
+            car.remove(passenger);
+            currentStation.spawnPerson(passenger); // Add the passenger back to the station
         }
     }
 
     public static void board() {
+        System.out.println("Boarding passengers...");
         for (Station s : stations) {
             boardTrain();
         }
+        System.out.println("Passengers boarded.");
     }
 
     public static Car carHoldingPassenger(Passenger p) {
@@ -142,25 +176,88 @@ public class Road {
         }
         return null;
     }
-
-    public static void main(String[] args) {
-        miles = 0;
-        revenue = 0;
-        int numcars = 20;
-        int numpassengers = 50;
-        System.out.println("Running first simulation");
-        System.out.println("Stations:");
-        addStations();
-        addCars(numcars);
-        addPassengers(numpassengers);
-        board();
-        System.out.println(stations.toString());
-        System.out.println("Moving cars:");
-        for (int i = 0; i < 33; i++) {
-            moveAll();
+    public void putPassengersInCars() {
+    for (Station station : stations) {
+        ArrayList<Passenger> passengers = station.getPeople();
+        for (Passenger passenger : passengers) {
+            Car car = carHoldingPassenger(passenger);
+            if (car != null && car.getPeople().size() < 4 && car.getStationNumber() == station.getStationNumber()) {
+                car.pickup(passenger);
+                int index = station.getPeople().indexOf(passenger);
+                if (index != -1) {
+                    station.removePerson(index);
+                }
+            }
         }
-        System.out.println(stations.toString());
-        System.out.println("Miles: " + miles + " revenue: " + revenue);
-        System.out.println("Revenue per mile: " + (double) revenue / miles);
     }
 }
+    
+public static void main(String[] args) {
+    int numCars = 20;
+    int numPassengers = 50;
+    ArrayList<Passenger> movedPassengers = new ArrayList<>();
+
+    Road road = new Road(); // Create an instance of Road
+    road.addStations(); // Call addStations on the instance
+    road.addCars(numCars); // Call addCars on the instance
+    road.addPassengers(numPassengers); // Call addPassengers on the instance
+
+    System.out.println("START");
+
+    System.out.println("Stations:");
+    road.addStations(); // Print stations
+
+    System.out.println("Cars:");
+    road.addCars(numCars); // Print number of cars added
+    System.out.println("Cars added: " + road.getCars().size());
+    System.out.println("Passengers:");
+    road.addPassengers(numPassengers); // Print number of passengers added
+
+    System.out.println("Initial:");
+    for (Station station : road.getStations()) { // Iterate through stations
+        System.out.print(station);
+        System.out.println(": ");
+        for (Passenger passenger : station.getPeople()) { // Print passengers at each station
+            System.out.println("[Passenger: " + passenger + "]");
+        }
+        System.out.println();
+    }
+
+    road.board(); // Board passengers onto cars
+
+    System.out.println("Moving cars:");
+
+    while(road.getCars().isEmpty() != false){
+        road.moveAll();
+    }
+
+    for (Station station : road.getStations()) { // Iterate through stations after moving
+        ArrayList<Passenger> stationPassengers = station.getPeople();
+        movedPassengers.addAll(stationPassengers); // Add passengers to movedPassengers list
+        stationPassengers.clear(); // Clear passengers from the station
+    }
+
+    System.out.println("moved");
+
+    System.out.println("Final:");
+
+    for (Station station : road.getStations()) { // Iterate through stations after moving
+        System.out.print(station);
+        System.out.println(": ");
+        for (Passenger passenger : station.getPeople()) { // Print passengers at each station
+            System.out.println("[Passenger: " + passenger + "]");
+            movedPassengers.add(passenger); // Add the passenger to the moved passengers list
+        }
+        System.out.println(); // Add a new line after printing passengers for each station
+    }
+
+    System.out.println("Output");
+    System.out.println("Miles traveled: " + road.getMiles());
+    System.out.println("Revenue generated: " + road.getRevenue());
+    if (road.getMiles() != 0) {
+        System.out.println("Revenue per mile: " + road.getRevenue() / road.getMiles());
+    } else {
+        System.out.println("No miles traveled, cannot calculate revenue per mile.");
+            }
+        }
+    }

@@ -9,22 +9,22 @@ public class Car {
     private int currentStation;
     private boolean moveable;
     private int revenue;
+    private int distanceTraveled;
 
     // Constructor
     public Car(int myInitialStation, int myDestination) {
-        destination = myDestination;
         initialStation = myInitialStation;
-        people = new ArrayList<Passenger>();
+        destination = myDestination;
+        people = new ArrayList<>();
         currentStation = myInitialStation;
         
-        // Randomize destination and current station
-        destination = (int) (Math.random() * 32);
-        currentStation = (int) (Math.random() * 32);
-
         // Set forward direction based on initial and destination stations
         forward = initialStation < destination;
+    
+        // Set moveability to true initially
+        moveable = true;
     }
-
+    
     // Mutator methods
     public void changeMoveability(boolean status) {
         moveable = status;
@@ -39,7 +39,7 @@ public class Car {
         return null;
     }
 
-    public void remove(int p) {
+    public void remove(Passenger p) {
         people.remove(p);
     }
 
@@ -56,6 +56,10 @@ public class Car {
 
     public boolean getMoveable() {
         return moveable;
+    }
+
+    public boolean isAtDestination() {
+        return currentStation == destination;
     }
 
     public ArrayList<Passenger> getPeople() {
@@ -76,20 +80,25 @@ public class Car {
 
     // Move method
     public void move() {
-        if (destination != currentStation) {
-            if (forward) {
-                currentStation++;
-            } else {
-                currentStation--;
-            }
+        if (currentStation < destination) {
+            currentStation++;
+        } else if (currentStation > destination) {
+            currentStation--;
         }
+        // Update distance traveled
+        distanceTraveled++;
+    }
 
-        // Calculate revenue
-        revenue += people.size();
+    public int getDistanceTraveled() {
+        return distanceTraveled;
     }
 
     // Getter for direction
     public boolean getDirection() {
         return forward;
+    }
+
+    public String toString(){
+        return "Initial station: " + initialStation + "Current station: " + currentStation + "Number of People: " + people.size();
     }
 }
