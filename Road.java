@@ -205,18 +205,19 @@ public static void main(String[] args) {
     System.out.println("START");
 
     System.out.println("Stations:");
-    road.addStations(); // Print stations
+    for (Station station : road.getStations()) { // Print stations
+        System.out.println(station);
+    }
 
     System.out.println("Cars:");
-    road.addCars(numCars); // Print number of cars added
     System.out.println("Cars added: " + road.getCars().size());
+
     System.out.println("Passengers:");
-    road.addPassengers(numPassengers); // Print number of passengers added
+    System.out.println("Passengers added: " + numPassengers);
 
     System.out.println("Initial:");
     for (Station station : road.getStations()) { // Iterate through stations
-        System.out.print(station);
-        System.out.println(": ");
+        System.out.print(station + ": ");
         for (Passenger passenger : station.getPeople()) { // Print passengers at each station
             System.out.println("[Passenger: " + passenger + "]");
         }
@@ -227,28 +228,24 @@ public static void main(String[] args) {
 
     System.out.println("Moving cars:");
 
-    while(road.getCars().isEmpty() != false){
+    while (!road.getCars().isEmpty()) {
         road.moveAll();
-    }
-
-    for (Station station : road.getStations()) { // Iterate through stations after moving
-        ArrayList<Passenger> stationPassengers = station.getPeople();
-        movedPassengers.addAll(stationPassengers); // Add passengers to movedPassengers list
-        stationPassengers.clear(); // Clear passengers from the station
     }
 
     System.out.println("moved");
 
-    System.out.println("Final:");
-
-    for (Station station : road.getStations()) { // Iterate through stations after moving
-        System.out.print(station);
-        System.out.println(": ");
-        for (Passenger passenger : station.getPeople()) { // Print passengers at each station
-            System.out.println("[Passenger: " + passenger + "]");
-            movedPassengers.add(passenger); // Add the passenger to the moved passengers list
+    // Collect passengers that have arrived at their destination
+    for (Station station : road.getStations()) {
+        System.out.println("Passengers that have arrived at station " + station.getStationNumber() + ":");
+        ArrayList<Passenger> stationPassengers = station.getPeople();
+        for (Passenger passenger : stationPassengers) {
+            if (passenger.getDestination()==(station.getStationNumber())) {
+                System.out.println("[Passenger: " + passenger + "]");
+                movedPassengers.add(passenger);
+            }
+            System.out.println();
         }
-        System.out.println(); // Add a new line after printing passengers for each station
+        stationPassengers.removeAll(movedPassengers);
     }
 
     System.out.println("Output");
@@ -258,6 +255,8 @@ public static void main(String[] args) {
         System.out.println("Revenue per mile: " + road.getRevenue() / road.getMiles());
     } else {
         System.out.println("No miles traveled, cannot calculate revenue per mile.");
-            }
-        }
+    }
+}
+
+
     }
