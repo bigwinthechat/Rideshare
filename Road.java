@@ -55,11 +55,15 @@ public class Road {
 
     
     public void boardTrain() {
+        // Iterate through each station
         for (Station station : stations) {
+            // Get the list of passengers waiting at the station
             ArrayList<Passenger> passengers = station.getPeople();
+            // Separate passengers based on their destination direction
             ArrayList<Passenger> passengersUp = new ArrayList<>();
             ArrayList<Passenger> passengersDown = new ArrayList<>();
     
+            // Categorize passengers as going up or down
             for (Passenger passenger : passengers) {
                 if (passenger.getDestination() > station.getStationNumber()) {
                     passengersUp.add(passenger);
@@ -68,17 +72,26 @@ public class Road {
                 }
             }
     
+            // Board passengers onto cars at the current station
             for (Car car : cars) {
+                // Check if the car is at the current station and going up
                 if ((car.getStationNumber() == station.getStationNumber()) && car.getDirection()) {
+                    // Output message indicating boarding direction
                     System.out.println("Boarding passengers onto car at station " + station.getStationNumber() + " going up:");
+                    // Call method to pick up passengers going up
                     pickupPassengers(car, passengersUp);
-                } else if ((car.getStationNumber() == station.getStationNumber()) && !car.getDirection()) {
+                } 
+                // Check if the car is at the current station and going down
+                else if ((car.getStationNumber() == station.getStationNumber()) && !car.getDirection()) {
+                    // Output message indicating boarding direction
                     System.out.println("Boarding passengers onto car at station " + station.getStationNumber() + " going down:");
+                    // Call method to pick up passengers going down
                     pickupPassengers(car, passengersDown);
                 }
             }
         }
     }
+    
     
     private void pickupPassengers(Car car, ArrayList<Passenger> stationPassengers) {
         ArrayList<Passenger> passengersToRemove = new ArrayList<>();
@@ -116,16 +129,24 @@ public class Road {
         // Create a list to store cars to be removed
         ArrayList<Car> carsToRemove = new ArrayList<>();
         
+        // Loop through all cars
         for (Car car : cars) {
+            // Move the car
             car.move();
+            // Update total miles traveled
             miles += car.getDistanceTraveled();
             
+            // Check if the car has reached its destination
             if (car.isAtDestination()) {
+                // Drop off passengers at the destination station
                 dropoff(car);
-                carsToRemove.add(car); // Add the car to the removal list
+                // Add the car to the removal list
+                carsToRemove.add(car);
             } else {
+                // Get the current station of the car
                 Station currentStation = stations.get(car.getStationNumber());
-            
+                
+                // Remove passengers who have reached their original destination
                 ArrayList<Passenger> carPassengers = car.getPeople();
                 ArrayList<Passenger> passengersToRemove = new ArrayList<>();
                 for (Passenger passenger : carPassengers) {
@@ -139,7 +160,8 @@ public class Road {
                     currentStation.spawnPerson(passenger);
                     System.out.println("Passenger " + passenger + " dropped off at station " + currentStation.getStationNumber());
                 }
-            
+                
+                // Pick up passengers waiting at the current station
                 ArrayList<Passenger> stationPassengers = currentStation.getPeople();
                 ArrayList<Passenger> passengersToPickup = new ArrayList<>();
                 for (Passenger passenger : stationPassengers) {
@@ -158,8 +180,10 @@ public class Road {
         // Remove the cars that need to be removed
         cars.removeAll(carsToRemove);
         
+        // Calculate revenue based on the fare per mile
         calculateRevenue(farePerMile);
-    }    
+    }
+
     
     
     private boolean passengerHasBeenDroppedOff(Passenger passenger, int stationNumber) {
@@ -289,7 +313,7 @@ public class Road {
         road.board();
         System.out.println("Moving cars:");
         while (road.getCars().isEmpty() == false) {
-            road.moveAll(farePerMile); // Pass the fare per mile as an argument
+            road.moveAll(farePerMile);
         }
 
     
