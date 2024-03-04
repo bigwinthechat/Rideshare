@@ -1,0 +1,7 @@
+This was definitley a challenging project. My main ideas were to use road as the main functioning part of the whole program. I put all the moving and logical ideas into road and used car, passeger, and station simpley to create the different parts of the project. Most of my efforts were spent in the moveAll() method in road. The method moveAll in the Road class handles how cars move. First, it makes each car move forward, keeping track of how far they've traveled. Then, it checks if any car has reached its destination. If so, it drops off passengers who wanted to go there. Next, it picks up passengers at the current stop if there's space in the car and they haven't been dropped off yet. After that, it removes cars that have reached their destination. Finally, it calculates how much money the cars made based on how far they traveled.
+
+Another hard put was the drop off. The dropoff method was easier, but I still had trouble with it, as it was connected with the moveall.
+
+Those two were very challenging. When I was working with Mr. Rosato, I realized that I had two arraylists of cars, one in station and the other in road. This would have made it very confusing.
+
+I am definitely most proud of the moveall method since it was very long and the whole program depended on it. I must have changed over 1000 times without exageration.
