@@ -287,8 +287,6 @@ public class Road {
         int numCars = 20;
         int numPassengers = 50;
         int farePerMile = 10; // Set the fare per mile
-        
-        ArrayList<Passenger> movedPassengers = new ArrayList<>();
     
         Road road = new Road();
         road.addStations();
